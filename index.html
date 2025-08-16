@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muskan 😌</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00cc88">
+  <style>
+      body {
+          background-color: #1e1e1e;
+          color: #ffffff;
+          font-family: Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          margin: 0;
+          padding: 20px;
+      }
+      textarea {
+          width: 90%;
+          max-width: 500px;
+          height: 100px;
+          margin: 10px 0;
+          padding: 10px;
+          font-size: 16px;
+          border-radius: 5px;
+          border: none;
+      }
+      #normalText {
+          background-color: #2c2c2c;
+          color: #ffffff;
+      }
+      #jumbledText {
+          background-color: #333333;
+          color: #00ff88;
+      }
+      button {
+          margin: 5px;
+          padding: 10px 20px;
+          font-size: 16px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          background-color: #00ff88;
+          color: #000000;
+      }
+      button:hover {
+          background-color: #00cc6a;
+      }
+  </style>
+</head>
+<body>
+  <h2>🌀 Muskan 😌</h2>
+  <textarea id="normalText" placeholder="Type your normal text here..."></textarea>
+  <textarea id="jumbledText" placeholder="Jumbled text will appear here..." readonly></textarea>
+  <div>
+      <button onclick="convertText()">Convert</button>
+      <button onclick="copyText()">Copy</button>
+      <button onclick="reJumble()">Re-Jumble</button>
+  </div>
+  <script>
+      if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('service-worker.js');
+      }
+      function jumbleWord(word) {
+          if (word.length > 3) {
+              let middle = word.slice(1, -1).split('');
+              for (let i = middle.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [middle[i], middle[j]] = [middle[j], middle[i]];
+              }
+              return word[0] + middle.join('') + word[word.length - 1];
+          }
+          return word;
+      }
+      function jumbleText(text) {
+          return text.split(' ').map(jumbleWord).join(' ');
+      }
+      function convertText() {
+          let normal = document.getElementById("normalText").value;
+          document.getElementById("jumbledText").value = jumbleText(normal);
+      }
+      function copyText() {
+          let jumbled = document.getElementById("jumbledText");
+          jumbled.select();
+          jumbled.setSelectionRange(0, 99999);
+          document.execCommand("copy");
+          alert("Copied to clipboard!");
+      }
+      function reJumble() {
+          convertText();
+      }
+  </script>
+</body>
+</html>
